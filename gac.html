@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -14,6 +15,16 @@
         html {
         overflow-y: scroll;
         }
+
+        .dark-theme {
+            background-color: #191919;
+            color: #EBEBEB;
+        }
+        .dark-theme-card {
+            background-color: #212121;
+            color: #EBEBEB;
+        }
+
         .form-row > .form-group {
             padding: 0 15px;
         }
@@ -26,7 +37,7 @@
 
         .color-input {
             background-color: #5166A9;
-            color: white;
+            color: #EBEBEB;
         }
         .color-calculations {
             background-color: #E3A654;
@@ -36,6 +47,9 @@
         }
         .text-bold {
             font-weight: bold;
+        }
+        .text-larger {
+            font-size: large;
         }
 
         .scrollable-table {
@@ -57,22 +71,22 @@
         }
     </style>
 </head>
-<body>
+<body class="dark-theme">
 <div id="app" class="container-full py-5">
-    <h1 class="text-center text-bold">GAC - Giant Abyss Calculator v1.0</h1>
-
+    <h1 class="text-center text-bold">GAC - Giant Abyss Calculator v1.1</h1>
+    <button class="btn btn-primary" id="theme-toggle" onclick="toggleDarkTheme()"><i id="theme-icon" class="fas fa-moon"></i></button>
     <div class="form-row">
         <div class="col-md-3">
-            <div class="card my-3">
+            <div class="card my-3 dark-theme">
                 <div class="card-header color-input" id="headingPrilea" data-toggle="collapse" data-target="#collapsePrilea"
                     aria-expanded="false" aria-controls="collapsePrilea">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Prilea
+                        <div class="text-bold">Prilea</div>
                         <i class="fas fa-chevron-up"></i>
                     </h5>
                 </div>
                 <div id="collapsePrilea" class="collapse" aria-labelledby="collapsePrilea">
-                    <div class="card mt-3">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -88,21 +102,24 @@
                                     <input type="number" class="form-control" id="prileaSpd" v-model.number="prileaSpd">
                                 </div>
 
-                                <div v-for="(item, index) in prileaArtefact" :key="index" class="form-group col-md-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="inputGroupSelectprilea">Artefact effect</label>
+                                <div class="form-group col-md-12">
+                                    <div v-for="(item, index) in prileaArtefact" :key="index" class="input-group mb-3">
+                                        <div class="col-md-9 p-0">
+                                            <select class="custom-select" id="inputGroupSelectPrilea" v-model="item.selected">
+                                                <option v-for="option in options" :key="option.value" :value="option.value">
+                                                    {{ option.text }}
+                                                </option>
+                                            </select>
                                         </div>
-                                        <select class="custom-select" id="inputGroupSelectprilea" v-model="item.selected">
-                                            <option v-for="option in options" :key="option.value" :value="option.value">
-                                                {{ option.text }}
-                                            </option>
-                                        </select>
-                                        <input type="text" class="form-control" v-model="item.value">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" @click="addItem('prileaArtefact')">Add Item</button>
-                                            <button class="btn btn-outline-secondary" type="button" @click="removeItem('prileaArtefact', index)">Remove</button>
+                                        <div class="col-md-2 pl-2 pr-0">
+                                            <input type="text" class="form-control" v-model="item.value">
                                         </div>
+                                        <div class="input-group-append col-md-1 pl-2">
+                                            <button class="btn btn-danger" type="button" @click="removeItem('prileaArtefact', index)"><i class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="text-center col-md-12">
+                                        <button class="btn btn-primary text-bold" @click="addItem('prileaArtefact')">+</button>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -116,16 +133,16 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card my-3">
+            <div class="card my-3 dark-theme">
                 <div class="card-header color-input" id="headingTeshar" data-toggle="collapse" data-target="#collapseTeshar"
                     aria-expanded="false" aria-controls="collapseTeshar">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Teshar
+                        <div class="text-bold">Teshar</div>
                         <i class="fas fa-chevron-up"></i>
                     </h5>
                 </div>
                 <div id="collapseTeshar" class="collapse" aria-labelledby="collapseTeshar">
-                    <div class="card mt-3">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -141,29 +158,32 @@
                                     <input type="number" class="form-control" id="tesharSpd" v-model.number="tesharSpd">
                                 </div>
 
-                                <div v-for="(item, index) in tesharArtefact" :key="index" class="form-group col-md-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="inputGroupSelectTeshar">Artefact effect</label>
+                                <div class="form-group col-md-12">
+                                    <div v-for="(item, index) in tesharArtefact" :key="index" class="input-group mb-3">
+                                        <div class="col-md-9 p-0">
+                                            <select class="custom-select" id="inputGroupSelectTeshar" v-model="item.selected">
+                                                <option v-for="option in options" :key="option.value" :value="option.value">
+                                                    {{ option.text }}
+                                                </option>
+                                            </select>
                                         </div>
-                                        <select class="custom-select" id="inputGroupSelectTeshar" v-model="item.selected">
-                                            <option v-for="option in options" :key="option.value" :value="option.value">
-                                                {{ option.text }}
-                                            </option>
-                                        </select>
-                                        <input type="text" class="form-control" v-model="item.value">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" @click="addItem('tesharArtefact')">Add Item</button>
-                                            <button class="btn btn-outline-secondary" type="button" @click="removeItem('tesharArtefact', index)">Remove</button>
+                                        <div class="col-md-2 pl-2 pr-0">
+                                            <input type="text" class="form-control" v-model="item.value">
                                         </div>
+                                        <div class="input-group-append col-md-1 pl-2">
+                                            <button class="btn btn-danger" type="button" @click="removeItem('tesharArtefact', index)"><i class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="text-center col-md-12">
+                                        <button class="btn btn-primary text-bold" @click="addItem('tesharArtefact')">+</button>
                                     </div>
                                 </div>
                                 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="tesharSU1">Skill Up S1</label>
                                     <input type="number" class="form-control" id="tesharSU1" v-model.number="tesharSU1" value=30>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="tesharSU3">Skill Up S3</label>
                                     <input type="number" class="form-control" id="tesharSU3" v-model.number="tesharSU3" value=30>
                                 </div>
@@ -174,21 +194,54 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card my-3">
-                <div class="card-header color-input" id="headingKonamiya" data-toggle="collapse" data-target="#collapseKonamiya"
-                    aria-expanded="false" aria-controls="collapsePrilea">
+            <div class="card my-3 dark-theme">
+                <div class="card-header color-input" id="headingHomunculus" data-toggle="collapse" data-target="#collapseHomunculus"
+                    aria-expanded="false" aria-controls="collapseHomunculus">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Konamiya
+                        <div class="text-bold">Homunculus</div>
                         <i class="fas fa-chevron-up"></i>
                     </h5>
                 </div>
-                <div id="collapseKonamiya" class="collapse" aria-labelledby="collapseKonamiya">
-                    <div class="card mt-3">
+                <div id="collapseHomunculus" class="collapse" aria-labelledby="collapseHomunculus">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="homunculusAtk">Runes ATK</label>
+                                    <input type="number" class="form-control" id="homunculusAtk" v-model.number="homunculusAtk">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="homunculusCDmg">Runes CDmg</label>
+                                    <input type="number" class="form-control" id="homunculusCDmg" v-model.number="homunculusCDmg">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="homunculusSpd">Runes SPD</label>
+                                    <input type="number" class="form-control" id="homunculusSpd" v-model.number="homunculusSpd">
+                                </div>
                                 <div class="form-group col-md-12">
-                                    <label for="konamiyaSpd">Rune SPD</label>
-                                    <input type="number" class="form-control" id="konamiyaSpd" v-model.number="konamiyaSpd">
+                                    <div v-for="(item, index) in homunculusArtefact" :key="index" class="input-group mb-3">
+                                        <div class="col-md-9 p-0">
+                                            <select class="custom-select" id="inputGroupSelectHomunculus" v-model="item.selected">
+                                                <option v-for="option in options" :key="option.value" :value="option.value">
+                                                    {{ option.text }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 pl-2 pr-0">
+                                            <input type="text" class="form-control" v-model="item.value">
+                                        </div>
+                                        <div class="input-group-append col-md-1 pl-2">
+                                            <button class="btn btn-danger" type="button" @click="removeItem('homunculusArtefact', index)"><i class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="text-center col-md-12">
+                                        <button class="btn btn-primary text-bold" @click="addItem('homunculusArtefact')">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="homunculusSU2">Skill Up S2</label>
+                                    <input type="number" class="form-control" id="homunculusSU2" v-model.number="homunculusSU2" value=30>
                                 </div>
                             </div>
                         </div>
@@ -197,16 +250,16 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card my-3">
+            <div class="card my-3 dark-theme">
                 <div class="card-header color-input" id="headingLuna" data-toggle="collapse" data-target="#collapseLuna"
                     aria-expanded="false" aria-controls="collapseLuna">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Luna
+                        <div class="text-bold">Luna</div>
                         <i class="fas fa-chevron-up"></i>
                     </h5>
                 </div>
                 <div id="collapseLuna" class="collapse" aria-labelledby="collapseLuna">
-                    <div class="card mt-3">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -222,28 +275,32 @@
                                     <input type="number" class="form-control" id="lunaSpd" v-model.number="lunaSpd">
                                 </div>
 
-                                <div v-for="(item, index) in lunaArtefact" :key="index" class="form-group col-md-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="inputGroupSelectLuna">Artefact effect</label>
+                                <div class="form-group col-md-12">
+                                    <div v-for="(item, index) in lunaArtefact" :key="index" class="input-group mb-3">
+                                        <div class="col-md-9 p-0">
+                                            <select class="custom-select" id="inputGroupSelectLuna" v-model="item.selected">
+                                                <option v-for="option in options" :key="option.value" :value="option.value">
+                                                    {{ option.text }}
+                                                </option>
+                                            </select>
                                         </div>
-                                        <select class="custom-select" id="inputGroupSelectLuna" v-model="item.selected">
-                                            <option v-for="option in options" :key="option.value" :value="option.value">
-                                                {{ option.text }}
-                                            </option>
-                                        </select>
-                                        <input type="text" class="form-control" v-model="item.value">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" @click="addItem('lunaArtefact')">Add Item</button>
-                                            <button class="btn btn-outline-secondary" type="button" @click="removeItem('lunaArtefact', index)">Remove</button>
+                                        <div class="col-md-2 pl-2 pr-0">
+                                            <input type="text" class="form-control" v-model="item.value">
+                                        </div>
+                                        <div class="input-group-append col-md-1 pl-2">
+                                            <button class="btn btn-danger" type="button" @click="removeItem('lunaArtefact', index)"><i class="fas fa-times"></i></button>
                                         </div>
                                     </div>
+                                    <div class="text-center col-md-12">
+                                        <button class="btn btn-primary text-bold" @click="addItem('lunaArtefact')">+</button>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-12">
+                                
+                                <div class="form-group col-md-6">
                                     <label for="lunaSU1">Skill Up S1</label>
                                     <input type="number" class="form-control" id="lunaSU1" v-model.number="lunaSU1" value=30>
                                 </div>
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-6">
                                     <label for="lunaSU3">Skill Up S3</label>
                                     <input type="number" class="form-control" id="lunaSU3" v-model.number="lunaSU3" value=20>
                                 </div>
@@ -256,51 +313,21 @@
     </div>
     <div class="form-row">
         <div class="col-md-4">
-            <div class="card my-3">
-                <div class="card-header color-input" id="headingHomunculus" data-toggle="collapse" data-target="#collapseHomunculus"
-                    aria-expanded="false" aria-controls="collapseHomunculus">
+            <div class="card my-3 dark-theme">
+                <div class="card-header color-input" id="headingKonamiya" data-toggle="collapse" data-target="#collapseKonamiya"
+                    aria-expanded="false" aria-controls="collapsePrilea">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Homunculus
+                        <div class="text-bold">Konamiya</div>
                         <i class="fas fa-chevron-up"></i>
                     </h5>
                 </div>
-                <div id="collapseHomunculus" class="collapse" aria-labelledby="collapseHomunculus">
-                    <div class="card mt-3">
+                <div id="collapseKonamiya" class="collapse" aria-labelledby="collapseKonamiya">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="homunculusAtk">Runes ATK</label>
-                                    <input type="number" class="form-control" id="homunculusAtk" v-model.number="homunculusAtk">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="homunculusCDmg">Runes CDmg</label>
-                                    <input type="number" class="form-control" id="homunculusCDmg" v-model.number="homunculusCDmg">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="homunculusSpd">Runes SPD</label>
-                                    <input type="number" class="form-control" id="homunculusSpd" v-model.number="homunculusSpd">
-                                </div>
-                                <div v-for="(item, index) in homunculusArtefact" :key="index" class="form-group col-md-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="inputGroupSelectLuna">Artefact effect</label>
-                                        </div>
-                                        <select class="custom-select" id="inputGroupSelectLuna" v-model="item.selected">
-                                            <option v-for="option in options" :key="option.value" :value="option.value">
-                                                {{ option.text }}
-                                            </option>
-                                        </select>
-                                        <input type="text" class="form-control" v-model="item.value">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" @click="addItem('homunculusArtefact')">More</button>
-                                            <button class="btn btn-outline-secondary" type="button" @click="removeItem('homunculusArtefact', index)">Remove</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-md-4">
-                                    <label for="homunculusSU2">Skill Up S2</label>
-                                    <input type="number" class="form-control" id="homunculusSU2" v-model.number="homunculusSU2" value=30>
+                                <div class="form-group col-md-12">
+                                    <label for="konamiyaSpd">Runes SPD</label>
+                                    <input type="number" class="form-control" id="konamiyaSpd" v-model.number="konamiyaSpd">
                                 </div>
                             </div>
                         </div>
@@ -309,16 +336,16 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card my-3">
+            <div class="card my-3 dark-theme">
                 <div class="card-header color-input" id="headingFights" data-toggle="collapse" data-target="#collapseFights"
                     aria-expanded="true" aria-controls="collapseFights">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Fights
+                        <div class="text-bold">Fights</div>
                         <i class="fas fa-chevron-up"></i>
                     </h5>
                 </div>
                 <div id="collapseFights" class="collapse" aria-labelledby="collapseFights">
-                    <div class="card mt-3">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
@@ -332,16 +359,16 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card my-3">
+            <div class="card my-3 dark-theme">
                 <div class="card-header color-input" id="headingTotems" data-toggle="collapse" data-target="#collapseTotems"
                     aria-expanded="false" aria-controls="collapseTotems">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Totems
+                        <div class="text-bold">Totems</div>
                         <i class="fas fa-chevron-up"></i>
                     </h5>
                 </div>
                 <div id="collapseTotems" class="collapse" aria-labelledby="collapseTotems">
-                    <div class="card mt-3">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -373,16 +400,16 @@
     </div>
     <div class="form-row">
         <div class="col-md-6">
-            <div class="card my-3">
+            <div class="card my-3 dark-theme">
                 <div class="card-header color-calculations collapsed" id="headingBattleStats" data-toggle="collapse" data-target="#collapseBattleStats"
                     aria-expanded="false" aria-controls="collapseBattleStats">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Battle Stats
+                        <div class="text-bold">Battle Stats</div>
                         <i class="fas fa-chevron-down"></i>
                     </h5>
                 </div>
                 <div id="collapseBattleStats" class="collapse" aria-labelledby="collapseBattleStats">
-                    <div class="card mt-3">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -430,16 +457,16 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card my-3">
+            <div class="card my-3 dark-theme">
                 <div class="card-header color-calculations collapsed" id="headingDamages" data-toggle="collapse" data-target="#collapseDamages"
                     aria-expanded="false" aria-controls="collapseDamages">
                     <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                        Damages
+                        <div class="text-bold">Damages</div>
                         <i class="fas fa-chevron-down"></i>
                     </h5>
                 </div>
                 <div id="collapseDamages" class="collapse" aria-labelledby="collapseDamages">
-                    <div class="card mt-3">
+                    <div class="card mt-1 dark-theme-card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-md-12">
@@ -527,47 +554,47 @@
             </div>
         </div>
     </div>
-    <div class="card my-3">
+    <div class="card my-3 dark-theme">
         <div class="card-header color-results collapsed" id="headingResults" data-toggle="collapse" data-target="#collapseResults"
             aria-expanded="false" aria-controls="collapseResults">
             <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                Results
+                <div class="text-bold">Results</div>
                 <i class="fas fa-chevron-down"></i>
             </h5>
         </div>
         <div id="collapseResults" class="collapse" aria-labelledby="collapseResults">
-            <div class="card mt-3">
+            <div class="card mt-1 dark-theme-card">
                 <div class="card-body">
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <div>
-                                SPD (Prilea → Teshar → Konamiya → (Teshar) → Luna → Homunculus)
-                                <div :style="{color: tesharSpdComparison.conditionMet ? 'green' : 'red'}">
+                                <h5 class="text-bold">SPD (Prilea → Teshar → Konamiya → Luna → Homunculus)</h5>
+                                <div class="text-larger" :style="{color: tesharSpdComparison.conditionMet ? 'green' : 'red'}">
                                     {{ prileaSpdComparison.text }}
                                 </div>
-                                <div :style="{color: tesharSpdComparison.conditionMet ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: tesharSpdComparison.conditionMet ? 'green' : 'red'}">
                                     {{ tesharSpdComparison.text }}
                                 </div>
-                                <div :style="{color: konamiyaSpdComparison.conditionMet ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: konamiyaSpdComparison.conditionMet ? 'green' : 'red'}">
                                     {{ konamiyaSpdComparison.text }}
                                 </div>
-                                <div :style="{color: lunaSpdComparison.conditionMet ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: lunaSpdComparison.conditionMet ? 'green' : 'red'}">
                                     {{ lunaSpdComparison.text }}
                                 </div>
-                                <div :style="{color: homunculusSpdComparison.conditionMet ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: homunculusSpdComparison.conditionMet ? 'green' : 'red'}">
                                     {{ homunculusSpdComparison.text }}
                                 </div>
                             </div>                            
                         </div>
                         <div class="form-group col-md-12">
                             <div>
-                                Turn order (7% atb precision)
+                                <h5 class="text-bold">Turn order (7% atb precision)</h5>
                                 <div class="col-12 scrollable-table">
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Tick {{ tickSpdOrder }}</th>
-                                                <th v-for="(tick, index) in reducedAllTicks" :key="'Tick-' + index">{{ tick[0] }}</th>
+                                                <th :style="{backgroundColor: '#2E404E', color: '#EBEBEB'}">Tick {{ tickSpdOrder }}</th>
+                                                <th v-for="(tick, index) in reducedAllTicks" :key="'Tick-' + index" :style="{backgroundColor: '#2E404E', color: '#EBEBEB'}">{{ tick[0] }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -602,24 +629,24 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div :style="{color: correct_turn_order ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: correct_turn_order ? 'green' : 'red'}">
                                     {{ reason }}
                                 </div>
                              </div>
                         </div>
                         <div class="form-group col-md-12">
                             <div>
-                               Damages
-                                <div :style="{color: w1Dmg().dmgEnough ? 'green' : 'red'}">
+                                <h5 class="text-bold">Damages</h5>
+                                <div class="text-larger" :style="{color: w1Dmg().dmgEnough ? 'green' : 'red'}">
                                     - W1 : {{ w1Dmg().detail }}
                                 </div>
-                                <div :style="{color: w2Dmg().dmgEnough ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: w2Dmg().dmgEnough ? 'green' : 'red'}">
                                     - W2 : {{ w2Dmg().detail }}
                                 </div>
-                                <div :style="{color: w3Dmg().dmgEnough ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: w3Dmg().dmgEnough ? 'green' : 'red'}">
                                     - W3 : {{ w3Dmg().detail }}
                                 </div>
-                                <div :style="{color: w4Dmg().dmgEnough ? 'green' : 'red'}">
+                                <div class="text-larger" :style="{color: w4Dmg().dmgEnough ? 'green' : 'red'}">
                                     - W4 : {{ w4Dmg().detail }}
                                 </div>
                             </div>
@@ -825,7 +852,7 @@
                 }
 
                 let boostAtb = new Array(monstersSpeed.length).fill(0);
-                let lunaMoved = false;
+                let lunaMoves = 0;
                 let homunculusMoved = false;
                 for (let t = 1; t < max_ticks; ++t) {
                     monstersTicks = new Array(monstersSpeed.length).fill(0);
@@ -852,17 +879,21 @@
                         boostAtb[1] = 100;
                     
                     // Luna boosts atb herself
-                    if (monstersTicks[3] >= 100 && monstersTicks[3] == maxTick && !lunaMoved) {
-                        lunaMoved = true;
+                    if (monstersTicks[3] >= 100 && monstersTicks[3] == maxTick && lunaMoves === 0) {
+                        lunaMoves = 1;
                         boostAtb[3] = 100;
                     }
 
-                    if (monstersTicks[3] >= 100 && monstersTicks[3] == maxTick && homunculusMoved) {
-                        break;
+                    if (monstersTicks[3] >= 100 && monstersTicks[3] == maxTick && lunaMoves === 1) {
+                        lunaMoves = 2;
                     }
 
                     if (monstersTicks[5] >= 100 && monstersTicks[5] == maxTick) {
                         homunculusMoved = true;
+                    }
+
+                    if (lunaMoves === 2 && homunculusMoved) {
+                        break;
                     }
                 }
                 
@@ -873,7 +904,7 @@
                     const maxIndex = monstersAllTicks[this.reducedAllTicks[i][0] - 1].reduce((maxIndex, current, currentIndex, arr) => { return current > arr[maxIndex] ? currentIndex : maxIndex;}, 0);
                     if (maxIndex != correct_turn_order[i]) {
                         this.correct_turn_order = false;
-                        this.reason = `Issue on tick ${this.reducedAllTicks[i][0]} : ${maxIndex} ${monstersName[maxIndex]} moves but it should be ${monstersName[correct_turn_order[i]]}`
+                        this.reason = `Tick ${this.reducedAllTicks[i][0]} : ${monstersName[maxIndex]} moves but it should be ${monstersName[correct_turn_order[i]]}`
                         return;
                     }
                 }
@@ -1121,6 +1152,39 @@
             }
         },
     });
+
+    function toggleDarkTheme() {
+        var body = document.body;
+        var icon = document.getElementById('theme-icon');
+        var cards = document.querySelectorAll('.card');
+        var internalCards = document.querySelectorAll('.card-body');
+
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            icon.classList.remove('fas', 'fa-moon');
+            icon.classList.add('fas', 'fa-sun');
+
+            cards.forEach(card => {
+                card.classList.remove('dark-theme');
+            });
+
+            internalCards.forEach(internalCard => {
+                internalCard.classList.remove('dark-theme-card');
+            });
+        } else {
+            body.classList.add('dark-theme');
+            icon.classList.remove('fas', 'fa-sun');
+            icon.classList.add('fas', 'fa-moon');
+
+            cards.forEach(card => {
+                card.classList.add('dark-theme');
+            });
+
+            internalCards.forEach(internalCard => {
+                internalCard.classList.add('dark-theme-card');
+            });
+        }
+    }
 </script>
 </body>
 </html>
