@@ -1049,9 +1049,9 @@
             },
 
             calculateAllDmg() {
-                // All teshar skills go on 1 target
                 let i = 1;
                 let golemHpLeft = 0;
+                // S1+S3+S1 on waves 2 and 4
                 for (; i < this.golemStats.length; i += 2) {
                     golemHpLeft = this.golemStats[i][0];
                     let hasDmgReduction = i === 3 ? true : false;
@@ -1116,19 +1116,19 @@
                 if (damages >= this.golemStats[1][0])
                     return {
                         dmgEnough: true,
-                        detail: `Prilea S1 + Teshar S1+S3+S1+S3 and Luna S3 : ${damages}, must be more than ${this.golemStats[1][0]}`
+                        detail: `Prilea S1 + Teshar S1+S3+S1 and Luna S3 : ${damages}, must be more than ${this.golemStats[1][0]}`
                     };
                 
                 if (self.homunculusSpdTotal <= 169)
                     return {
                         dmgEnough: false,
-                        detail: `Teshar S1+S3+S1+S3 and Luna S3 : ${damages}, must be more than ${this.golemStats[1][0]} (maybe put homunculus before ?)`
+                        detail: `Teshar S1+S3+S1 and Luna S3 : ${damages}, must be more than ${this.golemStats[1][0]} (maybe put homunculus before ?)`
                     };
                 
                 damages += this.allDmgHomunculus[0][0];
                 return {
                     dmgEnough: damages >= this.golemStats[1][0],
-                    detail: `Teshar S1+S3+S1+S3 and Luna S3 and Homunculus S2 : ${damages}, must be more than ${this.golemStats[1][0]}`
+                    detail: `Teshar S1+S3+S1 and Luna S3 and Homunculus S2 : ${damages}, must be more than ${this.golemStats[1][0]}`
                 };
             },
             w3Dmg() {
@@ -1147,7 +1147,7 @@
                 let damages = this.allDmgPrilea[1][0] + this.allDmgTeshar[3][4] + this.allDmgLuna[2][0] + this.allDmgLuna[2][1] + this.allDmgHomunculus[1][0];
                 return {
                     dmgEnough: damages >= 425000,
-                    detail: `Prilea S1 + Teshar S1+S3+S1+S3 and Luna S1+S3 and Homunculus S2 : ${damages}, must be more than ~ 425000 (${this.golemStats[3][0]} is optimal)`
+                    detail: `Prilea S1 + Teshar S1+S3+S1 and Luna S1+S3 and Homunculus S2 : ${damages}, must be more than ~ 425000 (${this.golemStats[3][0]} is optimal)`
                 };
             }
         },
