@@ -1,6 +1,8 @@
 var app = new Vue({
     el: '#app',
     data: {
+        app_version: '1.1.1',
+
         prileaAtk: 1600,
         prileaCDmg: 180,
         prileaSpd: 84,
