@@ -6,13 +6,13 @@ var app = new Vue({
         prileaAtk: 1600,
         prileaCDmg: 180,
         prileaSpd: 84,
-        prileaArtefact: [{ selected: "addDmgAtk", value: 8 }, { selected: "waterDmg", value: 10 }, { selected: "s1CDmg", value: 15 }],
+        prileaArtifact: [{ selected: "addDmgAtk", value: 8 }, { selected: "waterDmg", value: 10 }, { selected: "s1CDmg", value: 15 }],
         prileaSU1: 30,
 
         tesharAtk: 2650,
         tesharCDmg: 250,
         tesharSpd: 47,
-        tesharArtefact: [{ selected: "atkBuffBoost", value: 8 }, { selected: "waterDmg", value: 10 }, { selected: "s3CDmg", value: 15 }, { selected: "cDmgHighHp", value: 18 }],
+        tesharArtifact: [{ selected: "atkBuffBoost", value: 8 }, { selected: "waterDmg", value: 10 }, { selected: "s3CDmg", value: 15 }, { selected: "cDmgHighHp", value: 18 }],
         tesharSU1: 30,
         tesharSU3: 30,
 
@@ -21,14 +21,14 @@ var app = new Vue({
         lunaAtk: 2115,
         lunaCDmg: 250,
         lunaSpd: 51,
-        lunaArtefact: [{ selected: "addDmgAtk", value: 8 }, { selected: "waterDmg", value: 15 }, { selected: "cDmgLowHp", value: 45 }],
+        lunaArtifact: [{ selected: "addDmgAtk", value: 8 }, { selected: "waterDmg", value: 15 }, { selected: "cDmgLowHp", value: 45 }],
         lunaSU1: 30,
         lunaSU3: 20,
 
         homunculusAtk: 2000,
         homunculusCDmg: 240,
         homunculusSpd: 0,
-        homunculusArtefact: [{ selected: "addDmgAtk", value: 8 }, { selected: "waterDmg", value: 10 }, { selected: "cDmgLowHp", value: 45 }],
+        homunculusArtifact: [{ selected: "addDmgAtk", value: 8 }, { selected: "waterDmg", value: 10 }, { selected: "cDmgLowHp", value: 45 }],
         homunculusSU2: 30,
 
         totemAtk: 20,
@@ -266,8 +266,8 @@ var app = new Vue({
         getMaxColumn(index) {
             return Math.max(...this.reducedAllTicks[index])
         },
-        getArtefactStatAmount(artefactStats, stat) {
-            return artefactStats.reduce((acc, curr) => {
+        getArtifactStatAmount(artifactStats, stat) {
+            return artifactStats.reduce((acc, curr) => {
                 if (curr.selected === stat)
                     return acc + parseFloat(curr.value);
                 else
@@ -278,20 +278,20 @@ var app = new Vue({
             let finalAmount = 0;
             for (let i = 0; i < 2; ++i) {
                 let ratioHp = currentHp / maxHp;
-                const sCDmg = this.getArtefactStatAmount(this.prileaArtefact, "s1CDmg");
-                const ownTurnCDmg = this.getArtefactStatAmount(this.prileaArtefact, "ownTurnCDmg");
-                const firstSkillDmg = this.getArtefactStatAmount(this.prileaArtefact, "firstAtkCDmg");
-                const lowCDmg = (1 - ratioHp) * this.getArtefactStatAmount(this.prileaArtefact, "cDmgLowHp");
-                const highCDmg = ratioHp * this.getArtefactStatAmount(this.prileaArtefact, "cDmgHighHp");
+                const sCDmg = this.getArtifactStatAmount(this.prileaArtifact, "s1CDmg");
+                const ownTurnCDmg = this.getArtifactStatAmount(this.prileaArtifact, "ownTurnCDmg");
+                const firstSkillDmg = this.getArtifactStatAmount(this.prileaArtifact, "firstAtkCDmg");
+                const lowCDmg = (1 - ratioHp) * this.getArtifactStatAmount(this.prileaArtifact, "cDmgLowHp");
+                const highCDmg = ratioHp * this.getArtifactStatAmount(this.prileaArtifact, "cDmgHighHp");
                 const totalCDmg = this.prileaCDmgTotal + sCDmg + ownTurnCDmg + firstSkillDmg + lowCDmg + highCDmg;
 
-                const waterDmg = this.getArtefactStatAmount(this.prileaArtefact, "waterDmg");
+                const waterDmg = this.getArtifactStatAmount(this.prileaArtifact, "waterDmg");
 
                 const defenseDmgReduction = 1000 / (1140 + 3.5 * def);
 
                 const passiveDmgReduction = ratioHp <= 0.5 && hasDmgReduction ? 0.6 : 1;
 
-                const addAtk = this.prileaAtkTotal * this.getArtefactStatAmount(this.prileaArtefact, "waterDmg") / 100;
+                const addAtk = this.prileaAtkTotal * this.getArtifactStatAmount(this.prileaArtifact, "waterDmg") / 100;
 
                 let damages = Math.floor(passiveDmgReduction * (1 + waterDmg / 100) * (0.98 * this.prileaAtkTotal * defenseDmgReduction * 1.85 * (100 + this.prileaSU1 + totalCDmg) / 100 + addAtk));
                 currentHp -= damages;
@@ -302,21 +302,21 @@ var app = new Vue({
             return finalAmount;
         },
         dmgTeshar(ratioHp, def, firstSkill, atkBuff, hasDmgReduction, skill) {
-            const sCDmg = skill === 1 ? this.getArtefactStatAmount(this.tesharArtefact, "s1CDmg") : this.getArtefactStatAmount(this.tesharArtefact, "s3CDmg");
-            const ownTurnCDmg = this.getArtefactStatAmount(this.tesharArtefact, "ownTurnCDmg");
-            const firstSkillDmg = firstSkill ? this.getArtefactStatAmount(this.tesharArtefact, "firstAtkCDmg") : 0;
-            const lowCDmg = (1 - ratioHp) * this.getArtefactStatAmount(this.tesharArtefact, "cDmgLowHp");
-            const highCDmg = ratioHp * this.getArtefactStatAmount(this.tesharArtefact, "cDmgHighHp");
+            const sCDmg = skill === 1 ? this.getArtifactStatAmount(this.tesharArtifact, "s1CDmg") : this.getArtifactStatAmount(this.tesharArtifact, "s3CDmg");
+            const ownTurnCDmg = this.getArtifactStatAmount(this.tesharArtifact, "ownTurnCDmg");
+            const firstSkillDmg = firstSkill ? this.getArtifactStatAmount(this.tesharArtifact, "firstAtkCDmg") : 0;
+            const lowCDmg = (1 - ratioHp) * this.getArtifactStatAmount(this.tesharArtifact, "cDmgLowHp");
+            const highCDmg = ratioHp * this.getArtifactStatAmount(this.tesharArtifact, "cDmgHighHp");
             const totalCDmg = this.tesharCDmgTotal + sCDmg + ownTurnCDmg + firstSkillDmg + lowCDmg + highCDmg;
 
-            const waterDmg = this.getArtefactStatAmount(this.tesharArtefact, "waterDmg");
+            const waterDmg = this.getArtifactStatAmount(this.tesharArtifact, "waterDmg");
 
             const defenseDmgReduction = 1000 / (1140 + 3.5 * def);
 
             const passiveDmgReduction = ratioHp <= 0.5 && hasDmgReduction ? 0.6 : 1;
 
-            const realAtk = atkBuff ? (1.5 * (1 + this.getArtefactStatAmount(this.tesharArtefact, "atkBuffBoost") / 100)) * this.tesharAtkTotal : this.tesharAtkTotal;
-            const addAtk = realAtk * this.getArtefactStatAmount(this.tesharArtefact, "addDmgAtk") / 100;
+            const realAtk = atkBuff ? (1.5 * (1 + this.getArtifactStatAmount(this.tesharArtifact, "atkBuffBoost") / 100)) * this.tesharAtkTotal : this.tesharAtkTotal;
+            const addAtk = realAtk * this.getArtifactStatAmount(this.tesharArtifact, "addDmgAtk") / 100;
 
             const atkRatio = skill === 1 ? 4.2 : 3.9;
             const skillUp = skill === 1 ? this.tesharSU1 : this.tesharSU3;
@@ -328,19 +328,19 @@ var app = new Vue({
             let finalAmount = 0;
             for (let i = 0; i < 2; ++i) {
                 let ratioHp = currentHp / maxHp;
-                const s1CDmg = this.getArtefactStatAmount(this.lunaArtefact, "s1CDmg")
-                const ownTurnCDmg = this.getArtefactStatAmount(this.lunaArtefact, "ownTurnCDmg");
-                const firstSkillDmg = firstSkill == 1 ? this.getArtefactStatAmount(this.lunaArtefact, "firstAtkCDmg") : 0;
-                const lowCDmg = (1 - ratioHp) * this.getArtefactStatAmount(this.lunaArtefact, "cDmgLowHp");
-                const highCDmg = ratioHp * this.getArtefactStatAmount(this.lunaArtefact, "cDmgHighHp");
+                const s1CDmg = this.getArtifactStatAmount(this.lunaArtifact, "s1CDmg")
+                const ownTurnCDmg = this.getArtifactStatAmount(this.lunaArtifact, "ownTurnCDmg");
+                const firstSkillDmg = firstSkill == 1 ? this.getArtifactStatAmount(this.lunaArtifact, "firstAtkCDmg") : 0;
+                const lowCDmg = (1 - ratioHp) * this.getArtifactStatAmount(this.lunaArtifact, "cDmgLowHp");
+                const highCDmg = ratioHp * this.getArtifactStatAmount(this.lunaArtifact, "cDmgHighHp");
                 const totalCDmg = this.lunaCDmgTotal + s1CDmg + ownTurnCDmg + firstSkillDmg + lowCDmg + highCDmg;
 
-                const waterDmg = this.getArtefactStatAmount(this.lunaArtefact, "waterDmg");
+                const waterDmg = this.getArtifactStatAmount(this.lunaArtifact, "waterDmg");
 
                 const defenseDmgReduction = 1000 / (1140 + 3.5 * def);
                 const passiveDmgReduction = ratioHp <= 0.5 && hasDmgReduction ? 0.6 : 1;
 
-                const addAtk = this.lunaAtkTotal * this.getArtefactStatAmount(this.lunaArtefact, "addDmgAtk") / 100;
+                const addAtk = this.lunaAtkTotal * this.getArtifactStatAmount(this.lunaArtifact, "addDmgAtk") / 100;
 
                 let damages = Math.floor(passiveDmgReduction * (1 + waterDmg / 100) * (0.98 * this.lunaAtkTotal * defenseDmgReduction * 1.9 * (100 + this.lunaSU1 + totalCDmg) / 100 + addAtk));
                 currentHp -= damages;
@@ -353,38 +353,38 @@ var app = new Vue({
         dmgS3Luna(currentHp, maxHp, def, hasDmgReduction) {
             const ratioHp = currentHp / maxHp;
 
-            const s3CDmg = this.getArtefactStatAmount(this.lunaArtefact, "s3CDmg");
-            const ownTurnCDmg = this.getArtefactStatAmount(this.lunaArtefact, "ownTurnCDmg");
-            const firstSkillDmg = this.getArtefactStatAmount(this.lunaArtefact, "firstAtkCDmg");
-            const lowCDmg = (1 - ratioHp) * this.getArtefactStatAmount(this.lunaArtefact, "cDmgLowHp");
-            const highCDmg = ratioHp * this.getArtefactStatAmount(this.lunaArtefact, "cDmgHighHp");
+            const s3CDmg = this.getArtifactStatAmount(this.lunaArtifact, "s3CDmg");
+            const ownTurnCDmg = this.getArtifactStatAmount(this.lunaArtifact, "ownTurnCDmg");
+            const firstSkillDmg = this.getArtifactStatAmount(this.lunaArtifact, "firstAtkCDmg");
+            const lowCDmg = (1 - ratioHp) * this.getArtifactStatAmount(this.lunaArtifact, "cDmgLowHp");
+            const highCDmg = ratioHp * this.getArtifactStatAmount(this.lunaArtifact, "cDmgHighHp");
             const totalCDmg = this.lunaCDmgTotal + s3CDmg + ownTurnCDmg + firstSkillDmg + lowCDmg + highCDmg;
 
-            const waterDmg = this.getArtefactStatAmount(this.lunaArtefact, "waterDmg");
+            const waterDmg = this.getArtifactStatAmount(this.lunaArtifact, "waterDmg");
 
             const defenseDmgReduction = 1000 / (1140 + 3.5 * def);
             const passiveDmgReduction = ratioHp <= 0.5 && hasDmgReduction ? 0.6 : 1;
 
-            const addAtk = this.lunaAtkTotal * this.getArtefactStatAmount(this.lunaArtefact, "addDmgAtk") / 100;
+            const addAtk = this.lunaAtkTotal * this.getArtifactStatAmount(this.lunaArtifact, "addDmgAtk") / 100;
 
             return Math.floor(passiveDmgReduction * (1 + waterDmg / 100) * (0.98 * defenseDmgReduction * (this.lunaAtkTotal * 7.2 + maxHp * 0.15) * (100 + this.lunaSU3 + totalCDmg) / 100 + addAtk));
         },
         dmgS2Homunculus(currentHp, maxHp, def, hasDmgReduction) {
             const ratioHp = currentHp / maxHp;
 
-            const s2CDmg = this.getArtefactStatAmount(this.homunculusArtefact, "s2CDmg");
-            const ownTurnCDmg = this.getArtefactStatAmount(this.homunculusArtefact, "ownTurnCDmg");
-            const firstSkillDmg = this.getArtefactStatAmount(this.homunculusArtefact, "firstAtkCDmg");
-            const lowCDmg = (1 - ratioHp) * this.getArtefactStatAmount(this.homunculusArtefact, "cDmgLowHp");
-            const highCDmg = ratioHp * this.getArtefactStatAmount(this.homunculusArtefact, "cDmgHighHp");
+            const s2CDmg = this.getArtifactStatAmount(this.homunculusArtifact, "s2CDmg");
+            const ownTurnCDmg = this.getArtifactStatAmount(this.homunculusArtifact, "ownTurnCDmg");
+            const firstSkillDmg = this.getArtifactStatAmount(this.homunculusArtifact, "firstAtkCDmg");
+            const lowCDmg = (1 - ratioHp) * this.getArtifactStatAmount(this.homunculusArtifact, "cDmgLowHp");
+            const highCDmg = ratioHp * this.getArtifactStatAmount(this.homunculusArtifact, "cDmgHighHp");
             const totalCDmg = this.homunculusCDmgTotal + s2CDmg + ownTurnCDmg + firstSkillDmg + lowCDmg + highCDmg;
 
-            const waterDmg = this.getArtefactStatAmount(this.homunculusArtefact, "waterDmg");
+            const waterDmg = this.getArtifactStatAmount(this.homunculusArtifact, "waterDmg");
 
             const defenseDmgReduction = 1000 / (1140 + 3.5 * def);
             const passiveDmgReduction = ratioHp <= 0.5 && hasDmgReduction ? 0.6 : 1;
 
-            const addAtk = this.homunculusAtkTotal * this.getArtefactStatAmount(this.homunculusArtefact, "addDmgAtk") / 100;
+            const addAtk = this.homunculusAtkTotal * this.getArtifactStatAmount(this.homunculusArtifact, "addDmgAtk") / 100;
 
             return Math.floor(2 * (1 + waterDmg / 100) * (0.98 * defenseDmgReduction * (this.homunculusAtkTotal * 5 + maxHp * 0.05) * (100 + this.homunculusSU2 + totalCDmg) / 100 + addAtk));
         },
