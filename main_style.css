@@ -1,0 +1,56 @@
+html {
+    overflow-y: scroll;
+}
+
+.dark-theme {
+    background-color: #191919;
+    color: #EBEBEB;
+}
+.dark-theme-card {
+    background-color: #212121;
+    color: #EBEBEB;
+}
+
+.form-row > .form-group {
+    padding: 0 15px;
+}
+.fa-chevron-down {
+    transition: transform 0.35s ease;
+}
+.collapsed .fa-chevron-down {
+    transform: rotate(-180deg);
+}
+
+.color-input {
+    background-color: #0c61a4;
+}
+.color-calculations {
+    background-color: #a27713;
+}
+.color-results {
+    background-color: #369204;
+}
+.text-bold {
+    font-weight: bold;
+}
+.text-larger {
+    font-size: large;
+}
+
+.scrollable-table {
+    overflow-x: auto;
+}
+table {
+    width: 100%; 
+    white-space: nowrap;
+}
+td, th {
+    text-align: center; 
+    border: 1px solid #000;
+    min-width: 75px;
+}
+.container-full {
+    max-width: none;
+    width: 99%;
+    margin: 0.5%;
+}
